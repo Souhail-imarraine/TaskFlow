@@ -13,7 +13,6 @@ class Task {
         $this->assignedUser = $assignedUser;
     }
 
-    // Getters et Setters
     public function getId() {
         return $this->id;
     }

@@ -1,33 +1,75 @@
 <?php
 class User {
-    private $id;
-    private $name;
-    private $email;
+    public $id;
+    public $nom;
+    public $email;
+    private $conn;
+    private $password;
+    private $table_name = "users";
+    public $errors = [];
 
-    public function __construct($name, $email) {
-        $this->name = $name;
-        $this->email = $email;
+    public function __construct($conn) {
+        $this->conn = $conn;
     }
 
-    // Getters et Setters
-    public function getId() {
-        return $this->id;
+    // Getter for errors
+    public function getError() {
+        return $this->errors;
+    }
+    
+    // Register method
+    public function register($name, $email, $pass) {
+        // Validate input
+        if (empty($name) || empty($email) || empty($pass)) {
+            array_push($this->errors, "All fields are required");
+            return false;
+        }
+
+        // Validate email
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            array_push($this->errors, "Email address is not valid");
+            return false;
+        }
+
+        // Validate password
+        if (strlen($name) < 3) {
+            array_push($this->errors, "le nom doit contenir au moins 3 caractères");
+            return false;
+        }
+        if (strlen($pass) < 6) {
+            array_push($this->errors, "Le mot de passe doit contenir au moins 6 caractères");
+            return false;
+        }
+
+        $name = htmlspecialchars($name);
+        $email = htmlspecialchars($email);
+        $pass = htmlspecialchars($pass);
+
+        $pass = password_hash($pass, PASSWORD_BCRYPT);
+
+        try {
+            $query = "INSERT INTO " . $this->table_name . " (name, email, password) VALUES (?,?,?)";
+            $stmt = $this->conn->prepare($query);
+            if ($stmt->execute([$name, $email, $pass])) {
+                return true;
+            }
+        } catch (PDOException $e) {
+            echo "Erreur lors de l'insertion: " . $e->getMessage();
+        }
+        return false;
     }
 
-    public function getName() {
-        return $this->name;
-    }
 
-    public function setName($name) {
-        $this->name = $name;
-    }
+    public function login($email, $pass){
+        if (empty($email) || empty($pass)) {
+            array_push($this->errors, "All fields are required");
+            return false;
+        }
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            array_push($this->errors, "Email address is not valid");
+            return false;
+        }
 
-    public function getEmail() {
-        return $this->email;
-    }
-
-    public function setEmail($email) {
-        $this->email = $email;
     }
 }
 ?>
