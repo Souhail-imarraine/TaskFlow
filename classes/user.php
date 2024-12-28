@@ -70,6 +70,36 @@ class User {
             return false;
         }
 
+        if (strlen($pass) < 6) {
+            array_push($this->errors, "Le mot de passe doit contenir au moins 6 caractères");
+            return false;
+        }
+
+        
+        if(empty($errors)){
+            $query = "SELECT * FROM ". $this->table_name . " WHERE email = ?";
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute([$email]);
+            $userExists = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if(!$userExists){
+                array_push($this->errors, "this email Not Found");
+                return false ;
+            }else {
+                if(password_verify($pass, $userExists['password'])){
+                    $_SESSION['login'] = true ;
+                    $_SESSION['user_id'] = $userExists['id'];
+                    $_SESSION['name'] = $userExists['name'];
+                    $_SESSION['success_message'] = "You have successfully signed in.";
+                    return true ;
+                }else {
+                    array_push($this->errors, "Invalid password");
+                    return false;
+                }
+            }
+        }
+
     }
 }
+
 ?>

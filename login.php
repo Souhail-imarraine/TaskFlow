@@ -1,8 +1,25 @@
 <?php
 require_once 'config/database.php';
-$database = new Database;
-$db = $database->getConnection();
+require_once 'classes/user.php';
 
+$db = new Database;
+$pdo = $db->getConnection();
+
+$user = new User($pdo);
+
+if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])){
+    $email = $_POST['email'];
+    $pass = $_POST['password'];
+
+    $login = $user->login($email, $pass);
+
+    if($login){
+        header("Location: task.php");
+        exit();
+    }else {
+        $errors = $user->getError();
+    }
+}
 
 
 ?>
@@ -21,6 +38,13 @@ $db = $database->getConnection();
 
     <div class="bg-white shadow-md rounded-lg p-8 max-w-md w-full">
         <h1 class="text-2xl font-semibold text-gray-800 text-center mb-6">Welcome Back</h1>
+        <?php 
+        if(!empty($errors)) : 
+        foreach($errors as $error):
+        ?>
+        <p style='color:red;'><?php echo $error ?></p>
+        <?php endforeach; ?>
+        <?php endif; ?>
         <form action="" method="POST">
             <div class="mb-4">
                 <label for="email" class="block text-gray-700 font-medium mb-2">Email</label>
@@ -38,7 +62,7 @@ $db = $database->getConnection();
             </div>
 
             <!-- Submit Button -->
-            <button type="submit"
+            <button type="submit" name="login"
                 class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition">
                 Login
             </button>

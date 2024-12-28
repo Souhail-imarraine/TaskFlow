@@ -5,8 +5,9 @@ require_once 'classes/user.php';
 $db = new Database(); 
 $pdo = $db->getConnection();
 
+
 $user = new User($pdo);
-if ($_SERVER["REQUEST_METHOD"] == "POST") 
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['register'])) 
 {
      $name = $_POST['nom']; 
     $email = $_POST['email']; 
@@ -15,6 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 
     if ($register) { 
         header("Location: login.php");
+        exit();
     }else {
         $errors = $user->getError();
     }
@@ -67,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
             </div>
 
             <!-- Submit Button -->
-            <button type="submit"
+            <button type="submit" name="register"
                 class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition">
                 Register
             </button>
