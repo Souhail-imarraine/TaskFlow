@@ -18,19 +18,24 @@ class Task {
     }
 
     public function createTask($title, $status, $type, $user_id) {
+        
         // Validate input
-        if (empty($title) || empty($status) || empty($type)) {
-            array_push($this->errors, "All fields are required");
+        $validStatus = ['pending', 'in_progress', 'completed'];
+        $validType = ['task', 'bug', 'feature'];
+    
+        if (empty($title) || !in_array($status, $validStatus) || !in_array($type, $validType)) {
+            array_push($this->errors, "Invalid input values. Please check the task type and status");
             return false;
         }
-
+    
+        // Sanitize inputs
         $this->title = htmlspecialchars($title);
-        $this->status = htmlspecialchars($status);
-        $this->type = htmlspecialchars($type);
+        $this->status = htmlspecialchars($status); 
+        $this->type = htmlspecialchars($type);     
         $this->user_id = htmlspecialchars($user_id);
-
+    
         try {
-            $query = "INSERT INTO " . $this->table_name . " (title, status, type, user_id) VALUES (?,?,?,?)";
+            $query = "INSERT INTO " . $this->table_name . " (title, status, type, user_id) VALUES (?, ?, ?, ?)";
             $stmt = $this->conn->prepare($query);
             if ($stmt->execute([$this->title, $this->status, $this->type, $this->user_id])) {
                 $_SESSION['success_message'] = "Task added successfully";
@@ -41,5 +46,15 @@ class Task {
         }
         return false;
     }
+
+
+    public function afficherTasks($user_id){
+        $query = "SELECT * FROM ". $this->table_name . " WHERE user_id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([$user_id]);
+        return $stmt->fetchAll(PDO:: FETCH_ASSOC);
+    }
+    
 }
+
 ?>

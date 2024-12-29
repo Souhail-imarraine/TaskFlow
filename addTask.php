@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['createTask'])) {
                 <h1 class="text-3xl font-extrabold text-gray-800">Ajouter Task</h1>
             </header>
 
-            <div class="bg-white p-8 rounded-lg shadow-md max-w-3xl mx-auto">
+            <div class="bg-white p-8 rounded-lg shadow-md mx-auto">
                 <h2 class="text-xl font-semibold text-gray-700 mb-6">Créer une Nouvelle Tâche</h2>
                 <?php 
                 if (!empty($errors)) : 
@@ -84,27 +84,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['createTask'])) {
                     </div>
                     <!-- Task Type -->
                     <div>
-                        <label for="task-type" class="block text-sm font-medium text-gray-600">Type de tâche</label>
+                        <label for="task-type" class="block text-sm font-medium text-gray-600">Type de Tâche</label>
                         <select id="task-type" name="typeTask"
                             class="w-full p-4 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
                             required>
-                            <option value="basic">Basique</option>
+                            <option value="task">Tâche</option>
                             <option value="bug">Bug</option>
-                            <option value="feature">Feature</option>
+                            <option value="feature">feature</option>
                         </select>
                     </div>
 
                     <!-- Task Status -->
                     <div>
-                        <label for="task-status" class="block text-sm font-medium text-gray-600">Statut</label>
+                        <label for="task-status" class="block text-sm font-medium text-gray-600">Statut de la
+                            Tâche</label>
                         <select id="task-status" name="taskStatus"
                             class="w-full p-4 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
                             required>
-                            <option value="todo">To Do</option>
-                            <option value="in-progress">In Progress</option>
-                            <option value="done">Done</option>
+                            <option value="pending">pending</option>
+                            <option value="in_progress">in progress</option>
+                            <option value="completed">completed</option>
                         </select>
                     </div>
+
+
 
                     <!-- Submit Button -->
                     <div class="text-right">
