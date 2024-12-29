@@ -9,9 +9,10 @@ $pdo = $db->getConnection();
 $user = new User($pdo);
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['register'])) 
 {
-     $name = $_POST['nom']; 
+    $name = $_POST['nom']; 
     $email = $_POST['email']; 
     $password = $_POST['password']; 
+    
     $register  = $user->register($name, $email, $password);
 
     if ($register) { 

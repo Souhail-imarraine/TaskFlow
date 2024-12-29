@@ -41,6 +41,20 @@ class User {
             return false;
         }
 
+
+        if(empty($errors)){
+            $query = "SELECT * FROM ". $this->table_name . " WHERE email = ? LIMIT 1";
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute([$email]);
+            $userExists = $stmt->fetch(PDO:: FETCH_ASSOC);
+
+            if($userExists){
+                array_push($this->errors, "this email is already registred");
+                return false;
+            }
+        }
+        
+
         $name = htmlspecialchars($name);
         $email = htmlspecialchars($email);
         $pass = htmlspecialchars($pass);
@@ -75,9 +89,9 @@ class User {
             return false;
         }
 
-        
+
         if(empty($errors)){
-            $query = "SELECT * FROM ". $this->table_name . " WHERE email = ?";
+            $query = "SELECT * FROM ". $this->table_name . " WHERE email = ? LIMIT 1";
             $stmt = $this->conn->prepare($query);
             $stmt->execute([$email]);
             $userExists = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -87,11 +101,12 @@ class User {
                 return false ;
             }else {
                 if(password_verify($pass, $userExists['password'])){
-                    $_SESSION['login'] = true ;
+                    session_start();
+                    $_SESSION['login'] = true;
                     $_SESSION['user_id'] = $userExists['id'];
                     $_SESSION['name'] = $userExists['name'];
                     $_SESSION['success_message'] = "You have successfully signed in.";
-                    return true ;
+                    return true;
                 }else {
                     array_push($this->errors, "Invalid password");
                     return false;

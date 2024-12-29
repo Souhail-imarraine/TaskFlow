@@ -1,96 +1,97 @@
 <?php
-require_once 'config/Database.php';
-
-
- // Create a new instance of the Database class;
- $database = new Database(); 
- $db = $database->getConnection(); 
-
-
 
 
 ?>
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion des Tâches - TaskFlow</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Task Board</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-100 text-gray-900">
-    <div class="container mx-auto mt-10">
-        <h1 class="text-4xl font-bold mb-8 text-center text-blue-600">Gestion des Tâches</h1>
-
-        <!-- Liste des Tâches -->
-        <div class="bg-white shadow-lg rounded-lg p-6 mb-10">
-            <h2 class="text-2xl font-semibold mb-6 text-blue-600">Liste des Tâches</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-gray-50 p-4 rounded-lg shadow-md">
-                    <h3 class="font-semibold text-lg mb-2">Tâche 1</h3>
-                    <p class="text-gray-600 mb-2">Description de la tâche 1</p>
-                    <p class="text-sm text-gray-500 mb-4">Statut: En attente</p>
-                    <div class="flex justify-between">
-                        <button
-                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Modifier</button>
-                        <button
-                            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Supprimer</button>
-                    </div>
-                </div>
-                <div class="bg-gray-50 p-4 rounded-lg shadow-md">
-                    <h3 class="font-semibold text-lg mb-2">Tâche 2</h3>
-                    <p class="text-gray-600 mb-2">Description de la tâche 2</p>
-                    <p class="text-sm text-gray-500 mb-4">Statut: En cours</p>
-                    <div class="flex justify-between">
-                        <button
-                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Modifier</button>
-                        <button
-                            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Supprimer</button>
-                    </div>
-                </div>
-                <!-- Ajoutez plus de tâches ici -->
+<body class="bg-gray-100">
+    <!-- Sidebar -->
+    <div class="flex h-screen flex-col md:flex-row">
+ <aside class="bg-gradient-to-b from-gray-800 to-gray-600 text-white w-full md:w-64 p-4 shadow-lg">
+            <div class="flex items-center space-x-2 mb-6">
+                <div class="w-8 h-8 bg-gray-700 rounded-full"></div>
+                <span class="text-lg font-semibold">Teams in Space</span>
             </div>
-        </div>
+            <nav class="space-y-2">
+            <a href="index.php" class="flex items-center space-x-3 text-gray-400 hover:text-white">
+                    <span>📋</span>
+                    <span>Tasks</span>
+                </a>
+                <a href="addTask.php" class="flex items-center space-x-3 text-white font-semibold">
+                    <span>➕</span>
+                    <span>Ajouter Task</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 text-gray-400 hover:text-white">
+                    <span>⚙️</span>
+                    <span>Settings</span>
+                </a>
+            </nav>
+        </aside>
 
-        <!-- Formulaire de Création de Tâche -->
-        <div class="bg-white shadow-lg rounded-lg p-6">
-            <h2 class="text-2xl font-semibold mb-6 text-blue-600">Créer une Nouvelle Tâche</h2>
-            <form action="#" method="post">
-                <div class="mb-4">
-                    <label for="title" class="block text-gray-700 font-bold mb-2">Titre de la Tâche:</label>
-                    <input type="text" id="title" name="title"
-                        class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        required>
+        <!-- Main Content -->
+        <main class="flex-1 p-6 overflow-y-auto">
+            <header class="flex justify-between items-center mb-4">
+                <h1 class="text-2xl font-bold">Gestion les tache</h1>
+                <a href="logout.php"><button class="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-700">Deconnection</button></a>
+            </header>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                <!-- Column: To Do -->
+                <div class="bg-white rounded shadow p-4">
+                    <h2 class="font-semibold text-lg border-b pb-2 mb-4">To Do</h2>
+                    <div class="space-y-3">
+                        <div class="p-4 bg-gray-50 rounded border shadow-sm">
+                            <p>Engage Jupiter Express for outer solar system travel</p>
+                            <span class="text-xs text-yellow-600">SPACE TRAVEL PARTNERS</span>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded border shadow-sm">
+                            <p>Create 90-day plans for all departments in the Mars Office</p>
+                            <span class="text-xs text-red-600">LOCAL MARS OFFICE</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="mb-4">
-                    <label for="description" class="block text-gray-700 font-bold mb-2">Description:</label>
-                    <textarea id="description" name="description"
-                        class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        required></textarea>
+
+                <!-- Column: In Progress -->
+                <div class="bg-white rounded shadow p-4">
+                    <h2 class="font-semibold text-lg border-b pb-2 mb-4">In Progress</h2>
+                    <div class="space-y-3">
+                        <div class="p-4 bg-gray-50 rounded border shadow-sm">
+                            <p>Requesting available flights is now taking > 5 seconds</p>
+                            <span class="text-xs text-green-600">SESPACEEZ PLUS</span>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded border shadow-sm">
+                            <p>Engage Saturn Shuttle Lines for group tours</p>
+                            <span class="text-xs text-yellow-600">SPACE TRAVEL PARTNERS</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="mb-4">
-                    <label for="status" class="block text-gray-700 font-bold mb-2">Statut:</label>
-                    <select id="status" name="status"
-                        class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                        <option value="pending">En attente</option>
-                        <option value="in_progress">En cours</option>
-                        <option value="completed">Terminé</option>
-                    </select>
+
+                <!-- Column: Done -->
+                <div class="bg-white rounded shadow p-4">
+                    <h2 class="font-semibold text-lg border-b pb-2 mb-4">Done</h2>
+                    <div class="space-y-3">
+                        <div class="p-4 bg-gray-50 rounded border shadow-sm">
+                            <p>Homepage footer uses an inline style</p>
+                            <span class="text-xs text-purple-600">LARGE TEAM SUPPORT</span>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded border shadow-sm">
+                            <p>Engage JetShuttle SpaceWays for travel</p>
+                            <span class="text-xs text-yellow-600">SPACE TRAVEL PARTNERS</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="mb-4">
-                    <label for="assigned_user" class="block text-gray-700 font-bold mb-2">Attribué à:</label>
-                    <input type="text" id="assigned_user" name="assigned_user"
-                        class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                </div>
-                <div class="flex items-center justify-between">
-                    <button type="submit"
-                        class="bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-6 rounded focus:outline-none focus:shadow-outline">Créer</button>
-                </div>
-            </form>
-        </div>
+            </div>
+        </main>
     </div>
+
 </body>
 
 </html>

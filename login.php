@@ -14,7 +14,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])){
     $login = $user->login($email, $pass);
 
     if($login){
-        header("Location: task.php");
+        header("Location: addTask.php");
         exit();
     }else {
         $errors = $user->getError();

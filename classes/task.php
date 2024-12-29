@@ -1,52 +1,45 @@
 <?php
 class Task {
-    private $id;
-    private $title;
-    private $description;
-    private $status;
-    private $assignedUser;
+    private $table_name = "tasks";
+    private $user_id;
+    public $title;
+    public $status;
+    public $type;
 
-    public function __construct($title, $description, $status, $assignedUser) {
-        $this->title = $title;
-        $this->description = $description;
-        $this->status = $status;
-        $this->assignedUser = $assignedUser;
+    public $errors = [];
+    private $conn;
+
+    public function __construct($conn) {
+        $this->conn = $conn;
     }
 
-    public function getId() {
-        return $this->id;
+    public function getError() {
+        return $this->errors;
     }
 
-    public function getTitle() {
-        return $this->title;
-    }
+    public function createTask($title, $status, $type, $user_id) {
+        // Validate input
+        if (empty($title) || empty($status) || empty($type)) {
+            array_push($this->errors, "All fields are required");
+            return false;
+        }
 
-    public function setTitle($title) {
-        $this->title = $title;
-    }
+        $this->title = htmlspecialchars($title);
+        $this->status = htmlspecialchars($status);
+        $this->type = htmlspecialchars($type);
+        $this->user_id = htmlspecialchars($user_id);
 
-    public function getDescription() {
-        return $this->description;
-    }
-
-    public function setDescription($description) {
-        $this->description = $description;
-    }
-
-    public function getStatus() {
-        return $this->status;
-    }
-
-    public function setStatus($status) {
-        $this->status = $status;
-    }
-
-    public function getAssignedUser() {
-        return $this->assignedUser;
-    }
-
-    public function setAssignedUser($assignedUser) {
-        $this->assignedUser = $assignedUser;
+        try {
+            $query = "INSERT INTO " . $this->table_name . " (title, status, type, user_id) VALUES (?,?,?,?)";
+            $stmt = $this->conn->prepare($query);
+            if ($stmt->execute([$this->title, $this->status, $this->type, $this->user_id])) {
+                $_SESSION['success_message'] = "Task added successfully";
+                return true;
+            }
+        } catch (PDOException $e) {
+            array_push($this->errors, "Error during insertion: " . $e->getMessage());
+        }
+        return false;
     }
 }
 ?>
